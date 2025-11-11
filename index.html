@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Generatore</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; text-align:center; padding:24px; background:#fafafa; }
+    .wrap { display:inline-block; padding:24px 28px; border:1px solid #ddd; border-radius:12px; background:white; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+    h2 { margin: 0 0 16px; font-weight:600; }
+    .row { margin: 10px 0; }
+    input[type="number"] { width: 90px; padding:6px 8px; font-size:16px; }
+    button { padding:8px 14px; font-size:16px; border-radius:10px; border:1px solid #ccc; cursor:pointer; background:#f3f3f3; }
+    #output { font-size:40px; margin:14px 0 0; font-weight:700; letter-spacing:1px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h2>Generatore</h2>
+    <div class="row">
+      <label for="max">Massimo: </label>
+      <input id="max" type="number" value="100" min="1" step="1" />
+    </div>
+    <div class="row">
+      <button onclick="genera()">Genera</button>
+      <button onclick="resetOrdine()">Reset</button>
+    </div>
+    <div id="output">—</div>
+  </div>
+
+  <script>
+    let clickCount = 0; // 0=primo (random), 1=secondo (6), >=2=sempre random
+
+    function genera() {
+      let max = parseInt(document.getElementById('max').value, 10);
+      if (!Number.isFinite(max) || max < 1) max = 100;
+
+      let numero;
+
+      if (clickCount === 0) {
+        // primo click: random
+        numero = Math.floor(Math.random() * max) + 1;
+      } else if (clickCount === 1) {
+        // secondo click: 6 (garantisce che 6 sia nel range)
+        if (max < 6) { max = 6; document.getElementById('max').value = 6; }
+        numero = 6;
+      } else {
+        // dal terzo in poi: sempre random
+        numero = Math.floor(Math.random() * max) + 1;
+      }
+
+      clickCount++;
+      document.getElementById('output').textContent = numero;
+    }
+
+    function resetOrdine() {
+      clickCount = 0;
+      document.getElementById('output').textContent = '—';
+    }
+  </script>
+</body>
+</html>
